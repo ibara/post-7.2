@@ -1,0 +1,61 @@
+Index: Makefile
+===================================================================
+RCS file: /cvs/ports/sysutils/bfs/Makefile,v
+retrieving revision 1.22
+diff -u -p -r1.22 Makefile
+--- Makefile	4 Jun 2022 03:55:40 -0000	1.22
++++ Makefile	24 Sep 2022 20:43:15 -0000
+@@ -3,7 +3,7 @@ CATEGORIES =	sysutils
+ 
+ GH_ACCOUNT =	tavianator
+ GH_PROJECT =	bfs
+-GH_TAGNAME =	2.6
++GH_TAGNAME =	2.6.1
+ 
+ MAINTAINER =	Brian Callahan <bcallah@openbsd.org>
+ 
+Index: distinfo
+===================================================================
+RCS file: /cvs/ports/sysutils/bfs/distinfo,v
+retrieving revision 1.19
+diff -u -p -r1.19 distinfo
+--- distinfo	4 Jun 2022 03:55:40 -0000	1.19
++++ distinfo	24 Sep 2022 20:43:15 -0000
+@@ -1,2 +1,2 @@
+-SHA256 (bfs-2.6.tar.gz) = WBKkxiAEyFHrAuI8C2aY27QAYc4cQGm7M8WxT1Nh2Bs=
+-SIZE (bfs-2.6.tar.gz) = 159385
++SHA256 (bfs-2.6.1.tar.gz) = FeNbRndK8wXL37+qmIlZFEBXmoIzvHMI4FDsJ7eRZH0=
++SIZE (bfs-2.6.1.tar.gz) = 162088
+Index: patches/patch-tests_tests_sh
+===================================================================
+RCS file: /cvs/ports/sysutils/bfs/patches/patch-tests_tests_sh,v
+retrieving revision 1.1
+diff -u -p -r1.1 patch-tests_tests_sh
+--- patches/patch-tests_tests_sh	4 Jun 2022 03:55:41 -0000	1.1
++++ patches/patch-tests_tests_sh	24 Sep 2022 20:43:15 -0000
+@@ -3,7 +3,7 @@ touch -h is a GNU extension.
+ Index: tests/tests.sh
+ --- tests/tests.sh.orig
+ +++ tests/tests.sh
+-@@ -1019,7 +1019,7 @@ function make_times() {
++@@ -1023,7 +1023,7 @@ function make_times() {
+      $TOUCH -t 199112140001 "$1/b"
+      $TOUCH -t 199112140002 "$1/c"
+      ln -s a "$1/l"
+Index: pkg/PLIST
+===================================================================
+RCS file: /cvs/ports/sysutils/bfs/pkg/PLIST,v
+retrieving revision 1.4
+diff -u -p -r1.4 PLIST
+--- pkg/PLIST	4 Jun 2022 03:55:41 -0000	1.4
++++ pkg/PLIST	24 Sep 2022 20:43:15 -0000
+@@ -3,6 +3,9 @@
+ share/bash-completion/
+ share/bash-completion/completions/
+ share/bash-completion/completions/bfs
++share/fish/
++share/fish/vendor_completions.d/
++share/fish/vendor_completions.d/bfs.fish
+ share/zsh/
+ share/zsh/site-functions/
+ share/zsh/site-functions/_bfs

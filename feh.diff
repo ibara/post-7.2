@@ -1,0 +1,68 @@
+Index: Makefile
+===================================================================
+RCS file: /cvs/ports/graphics/feh/Makefile,v
+retrieving revision 1.110
+diff -u -p -r1.110 Makefile
+--- Makefile	11 Mar 2022 19:22:17 -0000	1.110
++++ Makefile	24 Sep 2022 20:58:40 -0000
+@@ -1,6 +1,6 @@
+ COMMENT=	lightweight image viewer
+ 
+-DISTNAME=	feh-3.8
++DISTNAME=	feh-3.9.1
+ EXTRACT_SUFX=	.tar.bz2
+ CATEGORIES=	graphics
+ FIX_EXTRACT_PERMISSIONS=Yes
+Index: distinfo
+===================================================================
+RCS file: /cvs/ports/graphics/feh/distinfo,v
+retrieving revision 1.71
+diff -u -p -r1.71 distinfo
+--- distinfo	19 Feb 2022 21:30:49 -0000	1.71
++++ distinfo	24 Sep 2022 20:58:40 -0000
+@@ -1,2 +1,2 @@
+-SHA256 (feh-3.8.tar.bz2) = fzw0VSs5M21+vuLXxL9Wl6qqLGwQLDV/boLqJAvWK6k=
+-SIZE (feh-3.8.tar.bz2) = 2122631
++SHA256 (feh-3.9.1.tar.bz2) = RVyScRtYivFJuUXtxcFF8+mqE37ZaJ2r7UnV5Kysdfo=
++SIZE (feh-3.9.1.tar.bz2) = 2108873
+Index: patches/patch-config_mk
+===================================================================
+RCS file: patches/patch-config_mk
+diff -N patches/patch-config_mk
+--- patches/patch-config_mk	11 Mar 2022 19:22:17 -0000	1.13
++++ /dev/null	1 Jan 1970 00:00:00 -0000
+@@ -1,18 +0,0 @@
+-zap redundant CFLAGS
+-
+-fix "filelist.c:253:45: error: use of undeclared identifier 'alphasort'"
+-
+-Index: config.mk
+---- config.mk.orig
+-+++ config.mk
+-@@ -36,10 +36,6 @@ scalable_icon_dir = ${icon_dir}/scalable/apps
+- 
+- # default CFLAGS
+- CFLAGS ?= -g -O2
+--CFLAGS += -Wall -Wextra -pedantic
+--
+--# Settings for glibc >= 2.19 - may need to be adjusted for other systems
+--CFLAGS += -std=c11 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700
+- 
+- ifeq (${curl},1)
+- 	CFLAGS += -DHAVE_LIBCURL
+Index: patches/patch-man_feh_pre
+===================================================================
+RCS file: /cvs/ports/graphics/feh/patches/patch-man_feh_pre,v
+retrieving revision 1.54
+diff -u -p -r1.54 patch-man_feh_pre
+--- patches/patch-man_feh_pre	11 Mar 2022 19:22:17 -0000	1.54
++++ patches/patch-man_feh_pre	24 Sep 2022 20:58:40 -0000
+@@ -1,7 +1,7 @@
+ Index: man/feh.pre
+ --- man/feh.pre.orig
+ +++ man/feh.pre
+-@@ -1383,7 +1383,7 @@ which
++@@ -1386,7 +1386,7 @@ which
+  defaults to
+  .Pa ~/.config/feh/ .
+  If the files are not found in that directory, it will also try

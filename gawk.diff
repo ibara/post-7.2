@@ -1,0 +1,83 @@
+Index: Makefile
+===================================================================
+RCS file: /cvs/ports/lang/gawk/Makefile,v
+retrieving revision 1.41
+diff -u -p -r1.41 Makefile
+--- Makefile	11 Mar 2022 19:28:58 -0000	1.41
++++ Makefile	24 Sep 2022 21:12:43 -0000
+@@ -1,6 +1,6 @@
+ COMMENT=	GNU awk
+ 
+-V=		5.1.0
++V=		5.2.0
+ DISTNAME=	gawk-$V
+ EXTRACT_SUFX=	.tar.xz
+ CATEGORIES=	lang
+Index: distinfo
+===================================================================
+RCS file: /cvs/ports/lang/gawk/distinfo,v
+retrieving revision 1.20
+diff -u -p -r1.20 distinfo
+--- distinfo	17 May 2020 20:26:40 -0000	1.20
++++ distinfo	24 Sep 2022 21:12:43 -0000
+@@ -1,2 +1,2 @@
+-SHA256 (gawk-5.1.0.tar.xz) = z1/qSsVmX9UXGvRxa6qy7/x2MGqVcpiNW6EHjxljgr0=
+-SIZE (gawk-5.1.0.tar.xz) = 3154564
++SHA256 (gawk-5.2.0.tar.xz) = 5N260cLvEOjoFcqAII0BYtTJg+bMoW+SXoQYYy1jkBg=
++SIZE (gawk-5.2.0.tar.xz) = 3385496
+Index: pkg/PLIST
+===================================================================
+RCS file: /cvs/ports/lang/gawk/pkg/PLIST,v
+retrieving revision 1.19
+diff -u -p -r1.19 PLIST
+--- pkg/PLIST	11 Mar 2022 19:28:58 -0000	1.19
++++ pkg/PLIST	24 Sep 2022 21:12:43 -0000
+@@ -1,10 +1,12 @@
+ bin/awk
+ @bin bin/gawk
+ @bin bin/gawk-${V}
++bin/gawkbug
+ include/gawkapi.h
+ @info info/gawk.info
+ @info info/gawkinet.info
+ @info info/gawkworkflow.info
++@info info/pm-gawk.info
+ lib/gawk/
+ @so lib/gawk/filefuncs.so
+ @so lib/gawk/fnmatch.so
+@@ -22,7 +24,9 @@ libexec/awk/
+ @bin libexec/awk/grcat
+ @bin libexec/awk/pwcat
+ @man man/man1/gawk.1
+-@mandir man/man3am/
++@man man/man1/gawkbug.1
++@man man/man1/pm-gawk.1
++man/man3am/
+ @man man/man3am/filefuncs.3am
+ @man man/man3am/fnmatch.3am
+ @man man/man3am/fork.3am
+@@ -46,6 +50,7 @@ share/awk/group.awk
+ share/awk/have_mpfr.awk
+ share/awk/inplace.awk
+ share/awk/intdiv0.awk
++share/awk/isnumeric.awk
+ share/awk/join.awk
+ share/awk/libintl.awk
+ share/awk/noassign.awk
+@@ -62,6 +67,7 @@ share/awk/shellquote.awk
+ share/awk/strtonum.awk
+ share/awk/walkarray.awk
+ share/awk/zerofile.awk
++share/locale/bg/LC_MESSAGES/gawk.mo
+ share/locale/ca/LC_MESSAGES/gawk.mo
+ share/locale/da/LC_MESSAGES/gawk.mo
+ share/locale/de/LC_MESSAGES/gawk.mo
+@@ -79,6 +85,8 @@ share/locale/nl/LC_MESSAGES/gawk.mo
+ share/locale/pl/LC_MESSAGES/gawk.mo
+ share/locale/pt/LC_MESSAGES/gawk.mo
+ share/locale/pt_BR/LC_MESSAGES/gawk.mo
++share/locale/ro/LC_MESSAGES/gawk.mo
++share/locale/sr/LC_MESSAGES/gawk.mo
+ share/locale/sv/LC_MESSAGES/gawk.mo
+ share/locale/vi/LC_MESSAGES/gawk.mo
+ share/locale/zh_CN/LC_MESSAGES/gawk.mo

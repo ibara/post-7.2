@@ -1,0 +1,287 @@
+Index: Makefile
+===================================================================
+RCS file: /cvs/ports/lang/algol68g/Makefile,v
+retrieving revision 1.6
+diff -u -p -r1.6 Makefile
+--- Makefile	25 Mar 2022 15:35:12 -0000	1.6
++++ Makefile	24 Sep 2022 20:43:47 -0000
+@@ -1,5 +1,5 @@
+ COMMENT =	Algol 68 Genie compiler-interpreter
+-DISTNAME =	algol68g-3.0.4
++DISTNAME =	algol68g-3.0.8
+ CATEGORIES =	lang
+ 
+ HOMEPAGE =	https://jmvdveer.home.xs4all.nl/algol.html
+@@ -16,23 +16,13 @@ WANTLIB += c curses m pthread
+ COMPILER =		base-clang ports-gcc
+ COMPILER_LANGS =	c
+ 
+-CONFIGURE_STYLE =	autoreconf
++CONFIGURE_STYLE =	gnu
+ CONFIGURE_ARGS =	--disable-gsl \
+-			--disable-mathib \
++			--disable-mathlib \
+ 			--disable-mpfr \
+ 			--disable-plotutils \
+ 			--disable-postgresql
+ CONFIGURE_ENV =		CPPFLAGS="${CPPFLAGS} -I${LOCALBASE}/include" \
+ 			LDFLAGS="${LDFLAGS} -L${LOCALBASE}/lib"
+-
+-AUTOCONF_VERSION =	2.69
+-AUTOMAKE_VERSION =	1.16
+-
+-# configure needs to be writeable otherwise autoconf won't regen it
+-post-extract:
+-	chmod +w ${WRKSRC}/configure
+-
+-do-gen:
+-	sed -i "s,LOCALBASE,${LOCALBASE},g" ${WRKSRC}/src/a68g/a68g.c
+ 
+ .include <bsd.port.mk>
+Index: distinfo
+===================================================================
+RCS file: /cvs/ports/lang/algol68g/distinfo,v
+retrieving revision 1.3
+diff -u -p -r1.3 distinfo
+--- distinfo	7 Mar 2022 15:40:53 -0000	1.3
++++ distinfo	24 Sep 2022 20:43:47 -0000
+@@ -1,2 +1,2 @@
+-SHA256 (algol68g-3.0.4.tar.gz) = JrrOXe1grvq32946NLAHs80xsmYF5o3SKWiNqFbp+HA=
+-SIZE (algol68g-3.0.4.tar.gz) = 622123
++SHA256 (algol68g-3.0.8.tar.gz) = l7nSB+0x6iY/N5nv7DZygHAbaTj37HflAwJN+ael77I=
++SIZE (algol68g-3.0.8.tar.gz) = 622731
+Index: patches/patch-configure
+===================================================================
+RCS file: patches/patch-configure
+diff -N patches/patch-configure
+--- /dev/null	1 Jan 1970 00:00:00 -0000
++++ patches/patch-configure	24 Sep 2022 20:43:47 -0000
+@@ -0,0 +1,14 @@
++Build on all OpenBSD archs
++
++Index: configure
++--- configure.orig
+++++ configure
++@@ -2591,7 +2591,7 @@ $as_echo "netbsd" >&6; }
++ #
++ # OpenBSD.
++ #
++-*86-*-openbsd* | *86_64-*-openbsd*)
+++*-*-openbsd*)
++ 
++ $as_echo "#define BUILD_BSD 1" >>confdefs.h
++ 
+Index: patches/patch-configure_ac
+===================================================================
+RCS file: patches/patch-configure_ac
+diff -N patches/patch-configure_ac
+--- patches/patch-configure_ac	25 Mar 2022 15:34:09 -0000	1.3
++++ /dev/null	1 Jan 1970 00:00:00 -0000
+@@ -1,62 +0,0 @@
+-Enable build on all archs
+-Build the compiler
+-Mention that we are IEEE 754 compliant
+-Remove hardcoded optimization flags
+-Remove broken configure tests
+-
+-Index: configure.ac
+---- configure.ac.orig
+-+++ configure.ac
+-@@ -243,11 +243,10 @@ case "$host" in
+- #
+- # OpenBSD.
+- #
+--*86-*-openbsd* | *86_64-*-openbsd*) 
+-+*-*-openbsd*)
+-   AC_DEFINE(BUILD_BSD, 1, [Define this if OpenBSD was detected]) 
+--  AC_MSG_WARN([configuring interpreter-only])
+-+  AC_DEFINE(HAVE_IEEE_754, 1, [Define this if IEEE_754 compliant]) 
+-   AC_MSG_RESULT([openbsd])
+--  enable_compiler=no
+-   ;;
+- #
+- # Haiku.
+-@@ -318,7 +317,6 @@ if test "x$GCC" != "xyes"; then
+-   AC_MSG_WARN([gcc is the preferred C compiler; configuring interpreter-only])
+- else
+-   AC_DEFINE(HAVE_GCC, 1, [Define this if GCC was detected]) 
+--  CFLAGS="-g -O2 -Wall"
+-   A68G_AC_PROG_CC_CFLAGS([-Wshadow])
+-   A68G_AC_PROG_CC_CFLAGS([-Wunused-variable])
+-   A68G_AC_PROG_CC_CFLAGS([-Wunused-parameter])
+-@@ -333,12 +331,6 @@ else
+-   [AC_MSG_RESULT(no)
+-    AC_MSG_FAILURE([stop -- C compiler does not support __attribute__aligned directive])],
+-   [])
+--  AC_MSG_CHECKING([attribute inline supported])
+--  AC_RUN_IFELSE([AC_LANG_PROGRAM([], [inline void skip (void) {;}])],
+--  [AC_MSG_RESULT(yes)],
+--  [AC_MSG_RESULT(no)
+--   AC_MSG_FAILURE([stop -- C compiler does not support __attribute__aligned directive])],
+--  [])
+- #
+- # Check -Wl,--export-dynamic, needed for creating shared objects.
+- #
+-@@ -732,17 +724,6 @@ if test "x$enable_postgresql" = "xyes"; then
+-   AC_CHECK_LIB([pq], [PQbackendPID], [], [enable_postgresql=no])
+-   if test "x$enable_postgresql" = "xyes"; then
+-     AC_DEFINE(HAVE_POSTGRESQL, 1, [Define this if a good PostgreSQL installation was detected]) 
+--  fi
+--fi
+--
+--if test "x$enable_compiler" = "xyes"; then
+--  libdl_found=no
+--  AC_MSG_NOTICE([Dynamic loader via libdl...])
+--  AC_CHECK_HEADERS([dlfcn.h])
+--  AC_CHECK_LIB([dl], [dlopen], [], enable_compiler=no)
+--  if test "x$enable_compiler" = "xyes"; then
+--    AC_DEFINE(HAVE_DL, 1, [Define this if a good DL installation was detected]) 
+--    libdl_found=yes
+-   fi
+- fi
+- 
+Index: patches/patch-src_a68g_a68g_c
+===================================================================
+RCS file: patches/patch-src_a68g_a68g_c
+diff -N patches/patch-src_a68g_a68g_c
+--- patches/patch-src_a68g_a68g_c	7 Mar 2022 15:40:53 -0000	1.1
++++ /dev/null	1 Jan 1970 00:00:00 -0000
+@@ -1,14 +0,0 @@
+-Use cc(1) rather than gcc to build shared libraries.
+-
+-Index: src/a68g/a68g.c
+---- src/a68g/a68g.c.orig
+-+++ src/a68g/a68g.c
+-@@ -448,7 +448,7 @@ static void compiler_interpreter (void)
+-       bufcat (options, " ", BUFFER_SIZE);
+-       bufcat (options, HAVE_PIC, BUFFER_SIZE);
+- #endif
+--      ASSERT (snprintf (cmd, SNPRINTF_SIZE, "gcc %s -c -o \"%s\" \"%s\"", options, FILE_BINARY_NAME (&A68_JOB), FILE_OBJECT_NAME (&A68_JOB)) >= 0);
+-+      ASSERT (snprintf (cmd, SNPRINTF_SIZE, "cc -ILOCALBASE/include %s -c -o \"%s\" \"%s\"", options, FILE_BINARY_NAME (&A68_JOB), FILE_OBJECT_NAME (&A68_JOB)) >= 0);
+-       ABEND (system (cmd) != 0, ERROR_ACTION, cmd);
+-       ASSERT (snprintf (cmd, SNPRINTF_SIZE, "ld -export-dynamic -shared -o \"%s\" \"%s\"", FILE_LIBRARY_NAME (&A68_JOB), FILE_BINARY_NAME (&A68_JOB)) >= 0);
+-       ABEND (system (cmd) != 0, ERROR_ACTION, cmd);
+Index: patches/patch-src_a68g_options_c
+===================================================================
+RCS file: patches/patch-src_a68g_options_c
+diff -N patches/patch-src_a68g_options_c
+--- patches/patch-src_a68g_options_c	7 Mar 2022 15:40:53 -0000	1.1
++++ /dev/null	1 Jan 1970 00:00:00 -0000
+@@ -1,32 +0,0 @@
+-We built the compiler, so we need to be able to use it.
+-
+-Index: src/a68g/options.c
+---- src/a68g/options.c.orig
+-+++ src/a68g/options.c
+-@@ -701,7 +701,7 @@ BOOL_T set_options (OPTION_LIST_T * i, BOOL_T cmd_line
+-         }
+- // COMPILE and NOCOMPILE switch on/off compilation.
+-         else if (eq (p, "Compile")) {
+--#if defined (BUILD_LINUX)
+-+#if defined (BUILD_LINUX) || defined (BUILD_BSD)
+-           OPTION_COMPILE (&A68_JOB) = A68_TRUE;
+-           OPTION_COMPILE_CHECK (&A68_JOB) = A68_TRUE;
+-           if (OPTION_OPT_LEVEL (&A68_JOB) < OPTIMISE_1) {
+-@@ -745,7 +745,7 @@ BOOL_T set_options (OPTION_LIST_T * i, BOOL_T cmd_line
+-         }
+- // RUN-SCRIPT runs a compiled .sh script.
+-         else if (eq (p, "RUN-SCRIPT")) {
+--#if defined (BUILD_LINUX)
+-+#if defined (BUILD_LINUX) || defined (BUILD_BSD)
+-           FORWARD (i);
+-           if (i != NO_OPTION_LIST) {
+-             if (!name_set) {
+-@@ -766,7 +766,7 @@ BOOL_T set_options (OPTION_LIST_T * i, BOOL_T cmd_line
+-         }
+- // RUN-QUOTE-SCRIPT runs a compiled .sh script.
+-         else if (eq (p, "RUN-QUOTE-SCRIPT")) {
+--#if defined (BUILD_LINUX)
+-+#if defined (BUILD_LINUX) || defined (BUILD_BSD)
+-           FORWARD (i);
+-           if (i != NO_OPTION_LIST) {
+-             if (!name_set) {
+Index: patches/patch-src_a68g_parallel_c
+===================================================================
+RCS file: patches/patch-src_a68g_parallel_c
+diff -N patches/patch-src_a68g_parallel_c
+--- patches/patch-src_a68g_parallel_c	7 Mar 2022 15:40:53 -0000	1.1
++++ /dev/null	1 Jan 1970 00:00:00 -0000
+@@ -1,14 +0,0 @@
+-Ignore usleep(3) return value.
+-It can only fail with EINTR and shouldn't stop execution.
+-
+-Index: src/a68g/parallel.c
+---- src/a68g/parallel.c.orig
+-+++ src/a68g/parallel.c
+-@@ -519,7 +519,6 @@ void genie_down_sema (NODE_T * p)
+-         UNLOCK_THREAD;
+- // Waiting a bit relaxes overhead.
+-         int rc = usleep (10);
+--        ASSERT (rc == 0 || rc == EINTR);
+-         LOCK_THREAD;
+- // Garbage may be collected, so recalculate 'k'.
+-         k = DEREF (A68_INT, &s);
+Index: patches/patch-src_include_a68g-includes_h
+===================================================================
+RCS file: patches/patch-src_include_a68g-includes_h
+diff -N patches/patch-src_include_a68g-includes_h
+--- patches/patch-src_include_a68g-includes_h	7 Mar 2022 15:40:53 -0000	1.1
++++ /dev/null	1 Jan 1970 00:00:00 -0000
+@@ -1,15 +0,0 @@
+-configure misdetects this but we need it to compile the compiler
+-
+-Index: src/include/a68g-includes.h
+---- src/include/a68g-includes.h.orig
+-+++ src/include/a68g-includes.h
+-@@ -66,9 +66,7 @@
+- #include <dirent.h>
+- #endif
+- 
+--#if defined (HAVE_DL)
+- #include <dlfcn.h>
+--#endif
+- 
+- #if defined (HAVE_ERRNO_H)
+- #include <errno.h>
+Index: patches/patch-src_include_a68g-platform_h
+===================================================================
+RCS file: patches/patch-src_include_a68g-platform_h
+diff -N patches/patch-src_include_a68g-platform_h
+--- patches/patch-src_include_a68g-platform_h	7 Mar 2022 15:40:53 -0000	1.1
++++ /dev/null	1 Jan 1970 00:00:00 -0000
+@@ -1,14 +0,0 @@
+-Use correct configuration file.
+-
+-Index: src/include/a68g-platform.h
+---- src/include/a68g-platform.h.orig
+-+++ src/include/a68g-platform.h
+-@@ -24,8 +24,6 @@
+- 
+- #if defined (BUILD_WIN32)
+- #include "a68g-config.win32.h"
+--#elif defined (BUILD_BSD)
+--#include "a68g-config.bsd.h"
+- #else
+- #include "a68g-config.h"
+- #endif
+Index: patches/patch-src_include_a68g_h
+===================================================================
+RCS file: patches/patch-src_include_a68g_h
+diff -N patches/patch-src_include_a68g_h
+--- patches/patch-src_include_a68g_h	7 Mar 2022 15:40:53 -0000	1.1
++++ /dev/null	1 Jan 1970 00:00:00 -0000
+@@ -1,14 +0,0 @@
+-Build the compiler on OpenBSD.
+-
+-Index: src/include/a68g.h
+---- src/include/a68g.h.orig
+-+++ src/include/a68g.h
+-@@ -32,7 +32,7 @@
+- 
+- // Build switches depending on platform.
+- 
+--#if (defined (BUILD_LINUX) && defined (HAVE_GCC) && defined (HAVE_DL))
+-+#if (defined (HAVE_GCC))
+- #  define BUILD_A68_COMPILER
+- #else
+- // Untested, so disabled.

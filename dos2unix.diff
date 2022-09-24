@@ -1,0 +1,57 @@
+Index: Makefile
+===================================================================
+RCS file: /cvs/ports/converters/dos2unix/Makefile,v
+retrieving revision 1.24
+diff -u -p -r1.24 Makefile
+--- Makefile	11 Mar 2022 18:27:01 -0000	1.24
++++ Makefile	24 Sep 2022 20:48:45 -0000
+@@ -1,6 +1,6 @@
+ COMMENT=	convert DOS/MAC files to UNIX (line-endings/charset)
+ 
+-DISTNAME =	dos2unix-7.4.2
++DISTNAME =	dos2unix-7.4.3
+ 
+ CATEGORIES=	converters
+ 
+Index: distinfo
+===================================================================
+RCS file: /cvs/ports/converters/dos2unix/distinfo,v
+retrieving revision 1.19
+diff -u -p -r1.19 distinfo
+--- distinfo	28 Nov 2020 22:55:53 -0000	1.19
++++ distinfo	24 Sep 2022 20:48:45 -0000
+@@ -1,2 +1,2 @@
+-SHA256 (dos2unix-7.4.2.tar.gz) = YDXFjfbqKDLoaLWZ36DWCtQco+zIqieCLEt6l4nTrgE=
+-SIZE (dos2unix-7.4.2.tar.gz) = 727429
++SHA256 (dos2unix-7.4.3.tar.gz) = to20GVba+TOChCOqMFEOAMEtKe9ZFucV6NTmlP5mynI=
++SIZE (dos2unix-7.4.3.tar.gz) = 788278
+Index: pkg/PLIST
+===================================================================
+RCS file: /cvs/ports/converters/dos2unix/pkg/PLIST,v
+retrieving revision 1.9
+diff -u -p -r1.9 PLIST
+--- pkg/PLIST	11 Mar 2022 18:27:01 -0000	1.9
++++ pkg/PLIST	24 Sep 2022 20:48:45 -0000
+@@ -42,6 +42,12 @@ man/pt_BR/man1/
+ @man man/pt_BR/man1/mac2unix.1
+ @man man/pt_BR/man1/unix2dos.1
+ @man man/pt_BR/man1/unix2mac.1
++man/sr/
++man/sr/man1/
++@man man/sr/man1/dos2unix.1
++@man man/sr/man1/mac2unix.1
++@man man/sr/man1/unix2dos.1
++@man man/sr/man1/unix2mac.1
+ man/sv/
+ man/sv/man1/
+ @man man/sv/man1/dos2unix.1
+@@ -88,6 +94,9 @@ share/doc/dos2unix/pl/dos2unix.txt
+ share/doc/dos2unix/pt_BR/
+ share/doc/dos2unix/pt_BR/dos2unix.htm
+ share/doc/dos2unix/pt_BR/dos2unix.txt
++share/doc/dos2unix/sr/
++share/doc/dos2unix/sr/dos2unix.htm
++share/doc/dos2unix/sr/dos2unix.txt
+ share/doc/dos2unix/sv/
+ share/doc/dos2unix/sv/dos2unix.htm
+ share/doc/dos2unix/sv/dos2unix.txt
